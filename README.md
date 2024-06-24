@@ -1,7 +1,7 @@
 # Termacro
 A nvim plugin to create macros to your terminal commands.
 
-*For now termacro.nvim is a PoC and is not in it's best version.*
+*For now termacro.nvim is a test and is not in it's best version.*
 
 ## Setup
 
