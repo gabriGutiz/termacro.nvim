@@ -10,11 +10,18 @@ local M = {}
 local function setup_keymaps()
     local key = config.get("key")
 
-    api.nvim_set_keymap("n", key, '', {
+    local command_callback = function(k)
+        if k and k ~= "" then
+            commands.handle_command(k)
+        end
+    end
+
+    api.nvim_set_keymap("n", key..key, '', {
         noremap = true,
         callback = function()
-            local k = vim.fn.input("key > ")
-            commands.execute(k)
+            vim.ui.input({
+                prompt = "key > ",
+            }, command_callback)
         end
     })
 end

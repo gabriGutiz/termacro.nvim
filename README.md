@@ -28,10 +28,10 @@ return {
 ## TO-DO
 - [ ] Add tests
 - [ ] Make command output on buffer optional
-- [ ] Make usage without having to use enter
+- [x] Command usage without having to use input
 - [ ] Make commands persist after exiting nvim
 - [ ] Use temporary buffer that doens't need to be deleted (it's possible?)
-- [ ] Edit commands
+- [x] Edit commands
 - [ ] See created commands
 - [ ] User can create commands on configuration
 - [ ] User can create default commands depending on the file type
