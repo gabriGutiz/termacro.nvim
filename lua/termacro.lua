@@ -10,9 +10,13 @@ local M = {}
 local function setup_keymaps()
     local key = config.get("key")
 
-    for i, comm in ipairs(config.get("default_commands")) do
-        commands.CreateOrEditCommand(comm.key, true, comm.command, comm.buffer)
+    local comms = config.get("default_commands")
+    if comms then
+        for _, comm in ipairs(comms) do
+            commands.CreateOrEditCommand(comm.key, true, comm.command, comm.buffer)
+        end
     end
+
 
     local command_callback = function(k)
         if k and k ~= "" then
