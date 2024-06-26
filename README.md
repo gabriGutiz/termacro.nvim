@@ -30,10 +30,10 @@ return {
 - [ ] Make command output on buffer optional
 - [x] Command usage without having to use input
 - [ ] Make commands persist after exiting nvim
-- [ ] Use temporary buffer that doens't need to be deleted (it's possible?)
+- [ ] Use temporary buffer that doesn't need to be deleted (it's possible?)
 - [x] Edit commands
 - [ ] See created commands
-- [ ] User can create commands on configuration
+- [x] User can create commands on configuration
 - [ ] User can create default commands depending on the file type
 - [ ] Add help
 

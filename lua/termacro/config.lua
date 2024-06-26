@@ -1,7 +1,13 @@
 local M = {}
 
+---@class DefaultCommands
+---@field key string
+---@field command string
+---@field buffer boolean
+
 ---@class TermacroConfig
 ---@field key string
+---@field default_commands DefaultCommands[]
 
 ---@type TermacroConfig
 local config = {
@@ -12,8 +18,8 @@ local config = {
 ---@param key string?
 ---@return any
 function M.get(key)
-  if key then return config[key] end
-  return config
+    if key then return config[key] end
+    return config
 end
 
 ---@param user_conf TermacroConfig

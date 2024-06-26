@@ -10,40 +10,19 @@ local commands = {}
 ---@field command string
 ---@field buffer boolean
 
-local function handle_command_input(key, command, old_command)
-    if not command or command == "" then return end
-
-    if not old_command then
-        commands[key] = {
-            key = key,
-            command = command,
-            buffer = true
-        }
-    else
-        local val = commands[key]
-        if val then
-            val.command = command
-            commands[key] = val
-        end
-    end
-
-    vim.api.nvim_set_keymap("n", config.get("key")..key, '', {
-        noremap = true,
-        callback = function()
-            vim.api.nvim_command(fmt(":sp vnew | .! %s", command))
-        end
-    })
-end
-
 local function create_command(key, old_command)
 
     local defatult_command = ""
-    if old_command then
-        defatult_command = old_command.command
+    local handle_input = function(command)
+        CreateOrEditCommand(key, true, command, false)
     end
 
-    local handle_input = function(command)
-        handle_command_input(key, command, old_command)
+    if old_command then
+        defatult_command = old_command.command
+
+        handle_input = function(command)
+            CreateOrEditCommand(key, false, command, old_command.buffer)
+        end
     end
 
     vim.ui.input({
@@ -53,10 +32,45 @@ local function create_command(key, old_command)
     }, handle_input)
 end
 
+-- create or edit command
+---@param key string: key to map command
+---@param new boolean: is new command
+---@param command string: command
+---@param buffer boolean: output in buffer option
+function CreateOrEditCommand(key, new, command, buffer)
+    if not command or command == "" then return end
+
+    if new then
+        commands[key] = {
+            key = key,
+            command = command,
+            buffer = buffer
+        }
+    else
+        local val = commands[key]
+        if val then
+            val.command = command
+            val.buffer = buffer
+            commands[key] = val
+        end
+    end
+
+    local command_exec = fmt(":sp vnew | .! %s", command)
+    if not buffer then
+        command_exec = fmt(":!%s", command)
+    end
+
+    vim.api.nvim_set_keymap("n", config.get("key")..key, '', {
+        noremap = true,
+        callback = function()
+            vim.api.nvim_command(command_exec)
+        end
+    })
+end
+
 -- execute command or ask to user to set
 ---@param key string
-function handle_command(key)
-
+function HandleCommand(key)
     local command = commands[key]
 
     if command then
@@ -67,4 +81,7 @@ function handle_command(key)
     create_command(key)
 end
 
-return { handle_command = handle_command }
+return {
+    HandleCommand = HandleCommand,
+    CreateOrEditCommand = CreateOrEditCommand
+}
