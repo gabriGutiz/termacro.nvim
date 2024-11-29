@@ -14,7 +14,7 @@ local function create_command(key, old_command)
 
     local defatult_command = ""
     local handle_input = function(command)
-        CreateOrEditCommand(key, true, command, false)
+        CreateOrEditCommand(key, true, command, true)
     end
 
     if old_command then
@@ -64,6 +64,7 @@ function CreateOrEditCommand(key, new, command, buffer)
         noremap = true,
         callback = function()
             vim.api.nvim_command(command_exec)
+            vim.opt.buftype = "nowrite"
         end
     })
 end
