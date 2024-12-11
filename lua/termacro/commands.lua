@@ -32,6 +32,23 @@ local function create_command(key, old_command)
     }, handle_input)
 end
 
+local function execute_command_output_in_split_buf(command)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.cmd("split")
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(win, buf)
+    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+    vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+    vim.fn.termopen(command, {
+        on_exit = function(_, code, _)
+            vim.notify("[Process exited with code "..code.."]", vim.log.levels.INFO)
+        end
+    })
+    -- Move cursor to the end of the buffer
+    local line_count = vim.api.nvim_buf_line_count(buf)
+    vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+end
+
 -- create or edit command
 ---@param key string: key to map command
 ---@param new boolean: is new command
@@ -55,16 +72,14 @@ function CreateOrEditCommand(key, new, command, buffer)
         end
     end
 
-    local command_exec = fmt(":sp vnew | .! %s", command)
-    if not buffer then
-        command_exec = fmt(":!%s", command)
-    end
-
     vim.api.nvim_set_keymap("n", config.get("key")..key, '', {
         noremap = true,
         callback = function()
-            vim.api.nvim_command(command_exec)
-            vim.opt.buftype = "nowrite"
+            if buffer then
+                execute_command_output_in_split_buf(command)
+            else
+                vim.cmd(fmt(":!%s", command))
+            end
         end
     })
 end

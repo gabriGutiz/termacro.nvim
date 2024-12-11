@@ -17,7 +17,6 @@ local function setup_keymaps()
         end
     end
 
-
     local command_callback = function(k)
         if k and k ~= "" then
             commands.HandleCommand(k)
