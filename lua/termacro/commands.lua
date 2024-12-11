@@ -32,7 +32,9 @@ local function create_command(key, old_command)
     }, handle_input)
 end
 
-local function execute_command_output_in_split_buf(command)
+-- execute command and show output in term buffer split horizontal
+---@param command string: command
+function ExecuteCommandOuputInSplitBuf(command)
     local buf = vim.api.nvim_create_buf(false, true)
     vim.cmd("split")
     local win = vim.api.nvim_get_current_win()
@@ -73,7 +75,7 @@ function CreateOrEditCommand(key, command, buffer)
         noremap = true,
         callback = function()
             if buffer then
-                execute_command_output_in_split_buf(command)
+                ExecuteCommandOuputInSplitBuf(command)
             else
                 vim.cmd(fmt(":!%s", command))
             end
@@ -96,5 +98,6 @@ end
 
 return {
     HandleCommand = HandleCommand,
-    CreateOrEditCommand = CreateOrEditCommand
+    CreateOrEditCommand = CreateOrEditCommand,
+    ExecuteCommand = ExecuteCommandOuputInSplitBuf
 }

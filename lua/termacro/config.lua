@@ -11,7 +11,8 @@ local M = {}
 
 ---@type TermacroConfig
 local config = {
-    key = ";"
+    key = ";",
+    execute_key = "e"
 }
 
 --- get the full user config or just a specified value

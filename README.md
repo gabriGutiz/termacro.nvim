@@ -15,11 +15,19 @@ $ git clone https://github.com/gabriGutiz/termacro.nvim
 Add using lazy.nvim:
 ```lua
 return {
-    dir = "~/Documents/projects/termacro", -- path to where termacro was cloned
+    dir = "~/Documents/projects/termacro.nvim", -- path to where termacro was cloned
     name = "termacro",
     config = function ()
         require('termacro').setup({
-            key = ";"
+            key = ";",                          -- sets the key to use termacro | default ';'
+            default_commands = {                -- default commands to be implemented when neovim is started
+                {
+                    key = "l",
+                    command = "ls -al",
+                    buffer = true               -- show output in a buffer updated in real time
+                }
+            },
+            execute_key = "e"                   -- key to execute a command passed in execution | default 'e'
         })
     end
 }
@@ -27,10 +35,10 @@ return {
 
 ## TO-DO
 - [ ] Add tests
-- [ ] Make command output on buffer optional
+- [ ] Make command output on buffer optional when added by ;;
 - [x] Command usage without having to use input
 - [ ] Make commands persist after exiting nvim
-- [ ] Use temporary buffer that doesn't need to be deleted (it's possible?)
+- [x] Use temporary buffer that doesn't need to be deleted
 - [x] Edit commands
 - [ ] See created commands
 - [x] User can create commands on configuration
