@@ -9,11 +9,11 @@ local M = {}
 
 local function setup_keymaps()
     local key = config.get("key")
-
     local comms = config.get("default_commands")
+
     if comms then
         for _, comm in ipairs(comms) do
-            commands.CreateOrEditCommand(comm.key, true, comm.command, comm.buffer)
+            commands.CreateOrEditCommand(comm.key, comm.command, comm.buffer)
         end
     end
 

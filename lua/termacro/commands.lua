@@ -14,14 +14,14 @@ local function create_command(key, old_command)
 
     local defatult_command = ""
     local handle_input = function(command)
-        CreateOrEditCommand(key, true, command, true)
+        CreateOrEditCommand(key, command, true)
     end
 
     if old_command then
         defatult_command = old_command.command
 
         handle_input = function(command)
-            CreateOrEditCommand(key, false, command, old_command.buffer)
+            CreateOrEditCommand(key, command, old_command.buffer)
         end
     end
 
@@ -51,25 +51,22 @@ end
 
 -- create or edit command
 ---@param key string: key to map command
----@param new boolean: is new command
 ---@param command string: command
 ---@param buffer boolean: output in buffer option
-function CreateOrEditCommand(key, new, command, buffer)
+function CreateOrEditCommand(key, command, buffer)
     if not command or command == "" then return end
 
-    if new then
+    local val = commands[key]
+    if val then
+        val.command = command
+        val.buffer = buffer
+        commands[key] = val
+    else
         commands[key] = {
             key = key,
             command = command,
             buffer = buffer
         }
-    else
-        local val = commands[key]
-        if val then
-            val.command = command
-            val.buffer = buffer
-            commands[key] = val
-        end
     end
 
     vim.api.nvim_set_keymap("n", config.get("key")..key, '', {
